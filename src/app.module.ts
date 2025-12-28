@@ -9,6 +9,7 @@ import { HealthController } from './health.controller';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CatalogModule } from './catalog/catalog.module';
+import { PlaybackModule } from './playback/playback.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CatalogModule } from './catalog/catalog.module';
     UsersModule,
     AuthModule,
     CatalogModule,
+    PlaybackModule,
   ],
   controllers: [HealthController],
 })

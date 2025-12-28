@@ -40,7 +40,7 @@ export class CatalogSeedService implements OnModuleInit {
         ageRating: 'PG-13',
         posterUrl: 'https://picsum.photos/300/450?random=1',
         backdropUrl: 'https://picsum.photos/1200/500?random=11',
-        playbackHlsUrl: null, // add later
+        playbackHlsUrl: 'http://localhost:8080/hls/master.m3u8', // add later
         featured: true,
         genres: [action, scifi],
       },
@@ -52,7 +52,7 @@ export class CatalogSeedService implements OnModuleInit {
         ageRating: 'TV-MA',
         posterUrl: 'https://picsum.photos/300/450?random=2',
         backdropUrl: 'https://picsum.photos/1200/500?random=12',
-        playbackHlsUrl: null,
+        playbackHlsUrl: 'http://localhost:8080/hls/master.m3u8',
         featured: false,
         genres: [drama],
       },

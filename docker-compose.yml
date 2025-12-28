@@ -31,8 +31,17 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      
+  media:
+    image: nginx:alpine
+    container_name: netflix_media
+    ports:
+      - "8080:80"
+    volumes:
+      - ./media/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./media:/usr/share/nginx/html:ro
 
 volumes:
   netflix_pgdata:
 
-  
+
