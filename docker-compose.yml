@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    container_name: netflix_postgres
+    environment:
+      POSTGRES_USER: netflix
+      POSTGRES_PASSWORD: netflix
+      POSTGRES_DB: netflix
+    ports:
+      - "5432:5432"
+    volumes:
+      - netflix_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U netflix -d netflix"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: netflix_api
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  netflix_pgdata:
+
+  
