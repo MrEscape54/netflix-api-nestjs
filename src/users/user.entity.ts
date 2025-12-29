@@ -24,6 +24,9 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 20, default: 'user' })
   role: UserRole;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  refreshTokenHash: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 }
