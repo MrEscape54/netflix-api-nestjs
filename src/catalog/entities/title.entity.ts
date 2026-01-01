@@ -18,6 +18,9 @@ export class TitleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ type: 'int', unique: true })
+  tmdbId: number;
+
   @Index()
   @Column({ type: 'varchar', length: 200 })
   name: string;

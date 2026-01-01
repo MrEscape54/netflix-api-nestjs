@@ -1,4 +1,4 @@
-// src/catalog/seed/catalog-seed.service.ts
+/* // src/catalog/seed/catalog-seed.service.ts
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -79,3 +79,4 @@ export class CatalogSeedService implements OnModuleInit {
     return out;
   }
 }
+ */

@@ -1,25 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { UsersModule } from '../users/users.module';
+import { AccountEntity } from './entities/account.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../users/user.entity';
+import { EmailVerificationTokenEntity } from './entities/email-verification-token.entity';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
-    UsersModule,
-    TypeOrmModule.forFeature([UserEntity]),
+    MailModule,
+    TypeOrmModule.forFeature([AccountEntity, EmailVerificationTokenEntity]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const jwt = config.get('jwt');
+        type JwtCfg = { accessSecret: string; accessExpiresIn: string };
+        const jwt = config.get<JwtCfg>('jwt', { infer: true })!;
         return {
           secret: jwt.accessSecret,
           signOptions: { expiresIn: jwt.accessExpiresIn },

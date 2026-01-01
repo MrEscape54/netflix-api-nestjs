@@ -6,17 +6,19 @@ import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { HealthController } from './health.controller';
-import { UsersModule } from './users/users.module';
+
 import { AuthModule } from './auth/auth.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { PlaybackModule } from './playback/playback.module';
+import { SearchModule } from './search/search.module';
+import { TitleEntity } from './catalog/entities/title.entity';
+import { GenreEntity } from './catalog/entities/genre.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-    }),
+    ConfigModule.forRoot({ isGlobal: true, load: [configuration], }),
+
+    TypeOrmModule.forFeature([TitleEntity, GenreEntity]),
 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -35,10 +37,10 @@ import { PlaybackModule } from './playback/playback.module';
       },
     }),
 
-    UsersModule,
     AuthModule,
     CatalogModule,
     PlaybackModule,
+    SearchModule,
   ],
   controllers: [HealthController],
 })

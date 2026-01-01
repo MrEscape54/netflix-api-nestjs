@@ -1,9 +1,11 @@
-import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { SignupDto } from './dto/signup.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { AuthGuard } from '@nestjs/passport';
+import * as jwtRequestType from './types/jwt-request.type';
 
 @Controller('auth')
 export class AuthController {
@@ -13,9 +15,14 @@ export class AuthController {
     private readonly config: ConfigService,
   ) { }
 
-  @Post('register')
-  async register(@Body() dto: RegisterDto) {
-    return this.auth.register(dto.email, dto.password);
+  @Post('signup')
+  signup(@Body() dto: SignupDto) {
+    return this.auth.signup(dto.email, dto.password);
+  }
+
+  @Get('verify')
+  verify(@Query('token') token: string) {
+    return this.auth.verifyEmail(token);
   }
 
   @Post('login')
@@ -25,7 +32,7 @@ export class AuthController {
 
   @Post('refresh')
   async refresh(@Body() body: { refreshToken: string }) {
-    const jwtCfg = this.config.get('jwt');
+    const jwtCfg = this.config.get('jwt') as any;
     try {
       const payload = await this.jwt.verifyAsync<{ sub: string }>(body.refreshToken, {
         secret: jwtCfg.refreshSecret,
@@ -36,8 +43,9 @@ export class AuthController {
     }
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('logout')
-  logout(@Body() body: { userId: string }) {
-    return this.auth.logout(body.userId);
+  logout(@Req() req: jwtRequestType.JwtRequest) {
+    return this.auth.logout(req.user.sub);
   }
 }
